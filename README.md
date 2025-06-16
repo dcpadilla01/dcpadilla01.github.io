@@ -58,7 +58,7 @@ This is a plug-and-play Jekyll theme best suited to use on [GitHub Pages](https:
 - Fuzzy search across blog posts
 - Blog with pagination
 - Categorize posts out-of-the box
-- RSS Feed
+- RSS Feed Yellow
 - Built-in sitemap
 
 > <p><i>Like this theme?</i> If so, consider donating a small amount that will help my maintaining this project further.<p>
