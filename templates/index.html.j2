@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>marimo WebAssembly + GitHub Pages Template</title>
+  <title>Gradient Kangaroo: on Risk, ML and AI</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -73,6 +73,12 @@
     .card-link.app {
       background-color: #ff9900;
     }
+    .card-header.article {
+      background-color: #d4edda;
+    }
+    .card-link.article {
+      background-color: #28a745;
+    }
     footer {
       background-color: #f0f0f0;
       text-align: center;
@@ -90,12 +96,28 @@
     <header>
       <div class="container">
         <img src="https://raw.githubusercontent.com/marimo-team/marimo/main/docs/_static/marimo-logotype-thick.svg" alt="marimo Logo" class="logo">
-        <h1>marimo WebAssembly + GitHub Pages Template</h1>
-        <p class="subtitle">Interactive Python notebooks exported to WebAssembly and deployed to GitHub Pages</p>
+        <h1>Gradient Kangaroo</h1>
+        <p class="subtitle">On Risk, ML and AI</p>
       </div>
     </header>
 
     <main class="container">
+
+    {% if articles %}
+    <h2 class="section-title">Articles</h2>
+    <p>Blog posts and static content</p>
+    <div class="cards">
+      {% for article in articles %}
+      <!-- {{ article.display_name }} Article -->
+      <div class="card">
+        <div class="card-header article">{{ article.display_name }}</div>
+        <div class="card-body">
+          <a href="{{ article.html_path }}" class="card-link article">Read Article</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
 
     {% if notebooks %}
     <h2 class="section-title">Notebooks</h2>

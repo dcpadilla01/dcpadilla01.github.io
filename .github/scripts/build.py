@@ -21,6 +21,7 @@ The exported files will be placed in the specified output directory (default: _s
 # ///
 
 import subprocess
+import shutil
 from typing import List, Union
 from pathlib import Path
 
@@ -83,7 +84,7 @@ def _export_html_wasm(notebook_path: Path, output_dir: Path, as_app: bool = Fals
         return False
 
 
-def _generate_index(output_dir: Path, template_file: Path, notebooks_data: List[dict] | None = None, apps_data: List[dict] | None = None) -> None:
+def _generate_index(output_dir: Path, template_file: Path, notebooks_data: List[dict] | None = None, apps_data: List[dict] | None = None, articles_data: List[dict] | None = None) -> None:
     """Generate an index.html file that lists all the notebooks.
 
     This function creates an HTML index page that displays links to all the exported
@@ -117,8 +118,8 @@ def _generate_index(output_dir: Path, template_file: Path, notebooks_data: List[
         )
         template = env.get_template(template_name)
 
-        # Render the template with notebook and app data
-        rendered_html = template.render(notebooks=notebooks_data, apps=apps_data)
+        # Render the template with notebook, app, and article data
+        rendered_html = template.render(notebooks=notebooks_data, apps=apps_data, articles=articles_data)
 
         # Write the rendered HTML to the index.html file
         with open(index_path, "w") as f:
@@ -175,6 +176,57 @@ def _export(folder: Path, output_dir: Path, as_app: bool=False) -> List[dict]:
     logger.info(f"Successfully exported {len(notebook_data)} out of {len(notebooks)} files from {folder}")
     return notebook_data
 
+def _copy_articles(output_dir: Path) -> List[dict]:
+    """Copy static HTML articles to the output directory.
+
+    This function finds all HTML files in the articles/ folder and copies them
+    to the output directory, maintaining the directory structure.
+
+    Args:
+        output_dir (Path): Directory where the articles will be copied
+
+    Returns:
+        List[dict]: List of dictionaries with "display_name" and "html_path" for each article
+    """
+    articles_dir = Path("articles")
+
+    # Check if the articles directory exists
+    if not articles_dir.exists():
+        logger.warning(f"Articles directory not found: {articles_dir}")
+        return []
+
+    # Find all HTML files in the articles directory
+    articles = list(articles_dir.rglob("*.html"))
+    logger.debug(f"Found {len(articles)} HTML files in {articles_dir}")
+
+    # Exit if no articles were found
+    if not articles:
+        logger.warning(f"No articles found in {articles_dir}!")
+        return []
+
+    # Copy each article to the output directory
+    article_data = []
+    for article in articles:
+        try:
+            # Create the destination path
+            dest_path = output_dir / article
+            dest_path.parent.mkdir(parents=True, exist_ok=True)
+
+            # Copy the article file
+            shutil.copy2(article, dest_path)
+            logger.info(f"Copied {article} to {dest_path}")
+
+            # Add article data for the index
+            article_data.append({
+                "display_name": article.stem.replace("_", " ").replace("-", " ").title(),
+                "html_path": str(article),
+            })
+        except Exception as e:
+            logger.error(f"Error copying {article}: {e}")
+
+    logger.info(f"Successfully copied {len(article_data)} out of {len(articles)} articles")
+    return article_data
+
 def main(
     output_dir: Union[str, Path] = "_site",
     template: Union[str, Path] = "templates/tailwind.html.j2",
@@ -212,13 +264,16 @@ def main(
     # Export apps from the apps/ directory
     apps_data = _export(Path("apps"), output_dir, as_app=True)
 
-    # Exit if no notebooks or apps were found
-    if not notebooks_data and not apps_data:
-        logger.warning("No notebooks or apps found!")
+    # Copy static HTML articles
+    articles_data = _copy_articles(output_dir)
+
+    # Exit if no notebooks, apps, or articles were found
+    if not notebooks_data and not apps_data and not articles_data:
+        logger.warning("No notebooks, apps, or articles found!")
         return
 
-    # Generate the index.html file that lists all notebooks and apps
-    _generate_index(output_dir=output_dir, notebooks_data=notebooks_data, apps_data=apps_data, template_file=template_file)
+    # Generate the index.html file that lists all notebooks, apps, and articles
+    _generate_index(output_dir=output_dir, notebooks_data=notebooks_data, apps_data=apps_data, articles_data=articles_data, template_file=template_file)
 
     logger.info(f"Build completed successfully. Output directory: {output_dir}")
 
