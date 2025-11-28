@@ -75,10 +75,9 @@ Marimo notebooks are Python files with special structure:
 
 ### Template System
 
-Three templates available in `templates/`:
-1. `index.html.j2` - Default styled template with footer
-2. `bare.html.j2` - Minimal template with basic styling
-3. `tailwind.html.j2` - Lean template using Tailwind CSS (current default)
+Two templates available in `templates/`:
+1. `index.html.j2` - Styled template with footer and more detailed layout
+2. `tailwind.html.j2` - Lean template using Tailwind CSS (current default)
 
 Templates receive `notebooks`, `apps`, and `articles` variables with structure:
 ```python
