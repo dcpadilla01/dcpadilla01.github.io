@@ -6,11 +6,92 @@
   <title>Gradient Kangaroo: on Risk, ML and AI</title>
   <!-- Include Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Include Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Brick background */
+    body {
+      background-image: url('brick_background.jpg');
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+    }
+
+    /* Garamond font for articles */
+    .newspaper-font {
+      font-family: 'EB Garamond', serif;
+    }
+
+    .headline-font {
+      font-family: 'EB Garamond', serif;
+    }
+
+    /* Silkscreen font for apps */
+    .retro-font {
+      font-family: 'Silkscreen', monospace;
+    }
+
+    /* CRT TV screen effect */
+    .crt-effect {
+      position: relative;
+      background: #0a0a0a;
+      border-radius: 20px;
+      box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 0 30px rgba(0,255,255,0.3);
+    }
+
+    .crt-effect::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 255, 255, 0.03) 0px,
+        rgba(0, 255, 255, 0.03) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      border-radius: 20px;
+    }
+
+    .crt-screen {
+      background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0a 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+/* NEW Newspaper Styles */
+    .newspaper-card {
+      background-color: #f4f1ea; /* The color of newsprint */
+      border: 1px solid #333;
+      box-shadow: 4px 4px 0px rgba(0,0,0,0.2); /* Retro hard shadow */
+      transition: all 0.2s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    
+    /* Hover effect: lifts up and rotates slightly */
+    .newspaper-card:hover {
+        transform: translateY(-2px) rotate(-1deg);
+        box-shadow: 8px 8px 10px rgba(0,0,0,0.3);
+    }
+
+    .newspaper-divider {
+      border-top: 2px solid #1a1a1a;
+      margin: 8px 0;
+    }
+  </style>
 </head>
-<body class="font-sans text-gray-800 bg-gradient-to-br from-blue-50 via-white to-purple-50 min-h-screen p-5">
-  <div class="max-w-5xl mx-auto">
+<body class="font-sans text-gray-800 min-h-screen p-5">
+  <div class="max-w-5xl mx-auto bg-white/98 backdrop-blur-sm rounded-3xl shadow-2xl p-8">
     <!-- Header -->
-    <header class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 p-10 text-center rounded-2xl mb-10 shadow-2xl relative overflow-hidden">
+    <header class="p-10 text-center rounded-2xl mb-10 shadow-2xl relative overflow-hidden">
       <!-- Animated background pattern -->
       <div class="absolute inset-0 bg-white/5 backdrop-blur-sm"></div>
       <div class="relative z-10">
@@ -20,28 +101,12 @@
     </header>
 
     <main>
-      {% if articles %}
-      <div class="mb-12">
-        <h2 class="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Articles</h2>
-        <p class="text-center text-gray-600 mb-6">Blog posts and insights</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for article in articles %}
-        <!-- {{ article.display_name }} Article -->
-        <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-          <div class="bg-gradient-to-r from-green-400 to-emerald-500 p-4 font-semibold text-white">{{ article.display_name }}</div>
-          <div class="p-5">
-            <a href="{{ article.html_path }}" class="inline-block bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-2 px-5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300">Read Article</a>
-          </div>
-        </div>
-        {% endfor %}
-        </div>
-      </div>
-      {% endif %}
 
+{#
       {% if notebooks %}
       <div class="mb-12">
-        <h2 class="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Notebooks</h2>
-        <p class="text-center text-gray-600 mb-6">Interactive Python notebooks you can edit and run</p>
+        <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">Notebooks</h2>
+        <p class="text-center text-gray-700 mb-6">Interactive Python notebooks you can edit and run</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for notebook in notebooks %}
         <!-- {{ notebook.display_name }} Notebook -->
@@ -54,30 +119,74 @@
         {% endfor %}
         </div>
       </div>
-      {% endif %}
+      {% endif %}#}
 
       {% if apps %}
       <div class="mb-12">
-        <h2 class="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Apps</h2>
-        <p class="text-center text-gray-600 mb-6">Interactive applications and visualizations</p>
+        <h2 class="text-4xl font-bold text-center mb-2 retro-font text-[#09eb24]" style="text-shadow: 0 0 10px rgba(34,255,0,0.5), 0 0 20px rgba(34,255,0,0.5);">Code</h2>
+        <p class="text-center text-gray-200 mb-6 retro-font text-sm">Interactive applications and visualizations</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for app in apps %}
         <!-- {{ app.display_name }} App -->
-        <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-          <div class="bg-gradient-to-r from-amber-400 to-orange-500 p-4 font-semibold text-white">{{ app.display_name }}</div>
-          <div class="p-5">
-            <a href="{{ app.html_path }}" class="inline-block bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white py-2 px-5 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-300">Open App</a>
+        <div class="crt-effect overflow-hidden transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl" style="box-shadow: 0 0 40px rgba(34, 255, 0, 0.92);">
+          <div class="crt-screen p-6 text-center relative" style="min-height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <!-- TV icon/screen effect -->
+            <div class="text-5xl mb-3" style="filter: drop-shadow(0 0 10px rgba(149, 255, 0, 0.6));">📺</div>
+            <h3 class="retro-font font-bold text-lg mb-4 text-[#09eb24]" style="text-shadow: 0 0 8px rgba(0, 255, 42, 0.8);">{{ app.display_name }}</h3>
+            <a href="{{ app.html_path }}" class="inline-block bg-[#09eb24] hover:bg-[#09eb24] text-black py-2 px-5 retro-font font-bold transition-all duration-300 border-2 border-[#09eb24]" style="box-shadow: 0 0 15px rgba(126, 253, 0, 0.93); text-shadow: none;">LAUNCH</a>
           </div>
         </div>
         {% endfor %}
         </div>
       </div>
       {% endif %}
+
+      {% if articles %}
+      <div class="mb-12">
+        <h2 class="text-4xl font-bold text-center mb-2 newspaper-font text-white" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">Notes</h2>
+        <p class="text-center text-gray-100 mb-8 newspaper-font text-xl italic border-b-2 border-double border-gray-300 w-1/3 mx-auto pb-4">Notes on Risk, ML and AI</p>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
+        {% for article in articles %}
+        
+          <a href="{{ article.html_path }}" class="group decoration-none">
+            <div class="newspaper-card p-6 relative">
+              
+              <div class="flex justify-between items-center mb-2 opacity-60">
+                <span class="newspaper-font text-xs uppercase tracking-widest font-bold">Vol. 1</span>
+                <span class="newspaper-font text-xs uppercase tracking-widest font-bold">The Daily GK</span>
+              </div>
+              
+              <hr class="newspaper-divider border-gray-800">
+              
+              <h3 class="headline-font text-2xl leading-tight text-gray-900 mb-4 group-hover:underline underline-offset-4 decoration-2">
+                {{ article.display_name }}
+              </h3>
+              
+              <div class="newspaper-font text-gray-700 text-sm leading-relaxed mb-4 flex-grow">
+                 <p class="line-clamp-3">
+                   A deep dive into {{ article.display_name }}. Click to read the full analysis, methodology, and results regarding this topic...
+                 </p>
+              </div>
+
+              <div class="mt-auto pt-4 border-t border-gray-300 flex justify-end">
+                 <span class="newspaper-font text-xs font-bold uppercase tracking-widest text-red-800 group-hover:text-red-600 transition-colors">
+                   Read Article &rarr;
+                 </span>
+              </div>
+              
+            </div>
+          </a>
+          
+        {% endfor %}
+        </div>
+      </div>
+      {% endif %}
     </main>
 
-    <footer class="mt-16 pt-8 border-t border-gray-300 text-center">
-      <p class="text-gray-600 mb-2">Built with <a href="https://marimo.io" target="_blank" class="text-purple-600 hover:text-purple-800 font-semibold transition-colors">marimo</a></p>
-      <p class="text-gray-500 text-sm">© 2025 Gradient Kangaroo</p>
+    <footer class="mt-16 pt-8 border-t border-gray-400 text-center">
+      <p class="text-gray-700 mb-2">Built with <a href="https://marimo.io" target="_blank" class="text-purple-600 hover:text-purple-800 font-semibold transition-colors">marimo</a></p>
+      <p class="text-gray-600 text-sm">© 2025 Gradient Kangaroo</p>
     </footer>
   </div>
 </body>

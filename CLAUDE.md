@@ -365,6 +365,127 @@ Automatic deployment via GitHub Actions (`.github/workflows/deploy.yml`):
 - **GitHub Actions**: CI/CD for automated deployment
 - **GitHub Pages**: Static site hosting
 
+## Custom Design Implementation
+
+### Current Design Features
+
+The site has been customized with unique visual styling for each content section while preserving full marimo functionality:
+
+#### 1. Articles Section - Newspaper Style
+- **Font**: EB Garamond (elegant serif font via Google Fonts)
+- **Visual Theme**: Vintage newspaper aesthetic
+  - Sepia-toned background (#f9f7f1)
+  - Brown double-border styling (#8b7355, #2c2416)
+  - 📰 Newspaper emoji icon
+  - Dark text on light background for readability
+- **CSS Classes**: `.newspaper-font`, `.newspaper-card`, `.newspaper-header`
+
+#### 2. Apps Section - Retro TV Screen Style
+- **Font**: Silkscreen (retro pixel/arcade font via Google Fonts)
+- **Visual Theme**: CRT TV screen with glowing effects
+  - Dark background with cyan glow (#0a0a0a, cyan accents)
+  - Scanline overlay effect (horizontal lines mimicking CRT monitors)
+  - Rounded corners (20px) resembling old TV sets
+  - 📺 TV emoji icon
+  - Glowing cyan text with text-shadow effects
+- **CSS Classes**: `.retro-font`, `.crt-effect`, `.crt-screen`
+
+#### 3. Background
+- **Image**: `brick_background.jpg` (455KB)
+- **Properties**:
+  - Fixed attachment (stays in place during scroll)
+  - Full coverage with `background-size: cover`
+  - Semi-transparent white overlay on main container for readability
+
+#### 4. Build Script Enhancement
+- Modified `.github/scripts/build.py` to include `_copy_static_assets()` function
+- Automatically copies `brick_background.jpg` to `_site/` on every build
+- Easily extensible - add more static assets to the `static_assets` list in the function
+
+### File Locations for Design Customization
+
+**Template File**: `templates/tailwind.html.j2`
+- Contains all HTML structure, custom CSS, and Google Fonts links
+- Custom CSS is in `<style>` tags in the `<head>` section (lines 13-75)
+- Articles section markup (lines 90-110)
+- Apps section markup (lines 130-148)
+
+**Build Script**: `.github/scripts/build.py`
+- Function `_copy_static_assets()` (lines 230-257)
+- Called from `main()` function (line 300)
+
+**Static Assets**: Root directory
+- `brick_background.jpg` - Background image
+
+### Making Further Design Changes
+
+#### Changing Fonts
+1. Find your desired Google Font at https://fonts.google.com
+2. Add the font link to `<head>` in `templates/tailwind.html.j2`:
+   ```html
+   <link href="https://fonts.googleapis.com/css2?family=Your+Font+Name&display=swap" rel="stylesheet">
+   ```
+3. Create a CSS class:
+   ```css
+   .your-font {
+     font-family: 'Your Font Name', fallback-type;
+   }
+   ```
+4. Apply the class to your section's HTML elements
+
+#### Changing Colors
+- **Articles section colors**: Look for hex codes like `#f9f7f1`, `#8b7355`, `#2c2416`
+- **Apps section colors**: Look for cyan values `rgba(0,255,255,...)` and dark backgrounds `#0a0a0a`, `#1a1a2e`
+- Replace with your preferred color scheme throughout the template
+
+#### Adding/Changing Visual Effects
+- **CRT scanlines**: Modify `.crt-effect::before` pseudo-element background gradient
+- **Shadows and glows**: Adjust `box-shadow` and `text-shadow` properties
+- **Borders**: Modify `border` properties in `.newspaper-card` and related classes
+
+#### Adding More Static Assets
+1. Place your asset file (image, CSS, JS, etc.) in the root directory or create a dedicated folder
+2. Edit `.github/scripts/build.py`, function `_copy_static_assets()`:
+   ```python
+   static_assets = [
+       "brick_background.jpg",
+       "your-new-asset.png",  # Add your asset here
+       "logos/header-logo.svg",  # Can include subdirectories
+   ]
+   ```
+3. Reference in template using relative path: `<img src="your-new-asset.png" />`
+
+#### Testing Changes
+```bash
+# 1. Build the site
+uv run .github/scripts/build.py
+
+# 2. Serve locally
+python3 -m http.server -d _site
+
+# 3. Preview at http://localhost:8000
+
+# 4. Check that:
+#    - Visual changes appear correctly
+#    - Fonts load properly
+#    - Images display
+#    - Marimo notebooks/apps still function
+```
+
+#### Reverting to Default Template
+If you want to return to a simpler design:
+1. Check out the original `templates/tailwind.html.j2` from git history
+2. Or create a new minimal template and specify it: `uv run .github/scripts/build.py --template templates/minimal.html.j2`
+
+### Design Philosophy
+
+The custom design follows these principles:
+- **Distinct visual identity** for each content type (articles, notebooks, apps)
+- **Preserve functionality** - all marimo features work unchanged
+- **Responsive design** - works on mobile and desktop
+- **Performance** - uses CDN fonts and optimized images
+- **Maintainability** - CSS organized in template, easy to find and modify
+
 ## Important Notes
 
 - The `build.py` symlink at root points to `.github/scripts/build.py` for convenience
@@ -372,3 +493,4 @@ Automatic deployment via GitHub Actions (`.github/workflows/deploy.yml`):
 - WebAssembly export runs notebooks client-side (no server needed)
 - Dependencies are bundled into the exported HTML files via WebAssembly
 - Default template is `tailwind.html.j2` (can be changed in build command)
+- Static assets (images, backgrounds) must be listed in `_copy_static_assets()` to be included in builds
