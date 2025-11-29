@@ -227,9 +227,38 @@ def _copy_articles(output_dir: Path) -> List[dict]:
     logger.info(f"Successfully copied {len(article_data)} out of {len(articles)} articles")
     return article_data
 
+def _copy_static_assets(output_dir: Path) -> None:
+    """Copy static assets (images, backgrounds, etc.) to the output directory.
+
+    This function copies static asset files needed by the site to the output directory.
+    Currently copies: brick_background.jpg
+
+    Args:
+        output_dir (Path): Directory where the assets will be copied
+
+    Returns:
+        None
+    """
+    # List of static assets to copy
+    static_assets = [
+        "brick_background.jpg",
+    ]
+
+    for asset in static_assets:
+        asset_path = Path(asset)
+        if asset_path.exists():
+            try:
+                dest_path = output_dir / asset_path.name
+                shutil.copy2(asset_path, dest_path)
+                logger.info(f"Copied static asset {asset} to {dest_path}")
+            except Exception as e:
+                logger.error(f"Error copying static asset {asset}: {e}")
+        else:
+            logger.warning(f"Static asset not found: {asset}")
+
 def main(
     output_dir: Union[str, Path] = "_site",
-    template: Union[str, Path] = "templates/tailwind.html.j2",
+    template: Union[str, Path] = "templates/tailwind_brutalism.html.j2",
 ) -> None:
     """Main function to export marimo notebooks.
 
@@ -266,6 +295,9 @@ def main(
 
     # Copy static HTML articles
     articles_data = _copy_articles(output_dir)
+
+    # Copy static assets (backgrounds, images, etc.)
+    _copy_static_assets(output_dir)
 
     # Exit if no notebooks, apps, or articles were found
     if not notebooks_data and not apps_data and not articles_data:
