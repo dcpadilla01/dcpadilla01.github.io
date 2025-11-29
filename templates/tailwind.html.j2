@@ -123,7 +123,7 @@
 
       {% if apps %}
       <div class="mb-12">
-        <h2 class="text-4xl font-bold text-center mb-2 retro-font text-[#09eb24]" style="text-shadow: 0 0 10px rgba(34,255,0,0.5), 0 0 20px rgba(34,255,0,0.5);">Code</h2>
+        <h2 class="text-4xl font-bold text-center mb-2 retro-font text-[#09eb24]" style="text-shadow: 0 0 10px rgba(34,255,0,0.5), 0 0 20px rgba(34,255,0,0.5);">📺 Code</h2>
         <p class="text-center text-gray-200 mb-6 retro-font text-sm">Interactive applications and visualizations</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for app in apps %}
@@ -131,7 +131,6 @@
         <div class="crt-effect overflow-hidden transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl" style="box-shadow: 0 0 40px rgba(34, 255, 0, 0.92);">
           <div class="crt-screen p-6 text-center relative" style="min-height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
             <!-- TV icon/screen effect -->
-            <div class="text-5xl mb-3" style="filter: drop-shadow(0 0 10px rgba(149, 255, 0, 0.6));">📺</div>
             <h3 class="retro-font font-bold text-lg mb-4 text-[#09eb24]" style="text-shadow: 0 0 8px rgba(0, 255, 42, 0.8);">{{ app.display_name }}</h3>
             <a href="{{ app.html_path }}" class="inline-block bg-[#09eb24] hover:bg-[#09eb24] text-black py-2 px-5 retro-font font-bold transition-all duration-300 border-2 border-[#09eb24]" style="box-shadow: 0 0 15px rgba(126, 253, 0, 0.93); text-shadow: none;">LAUNCH</a>
           </div>

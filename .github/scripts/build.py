@@ -258,7 +258,7 @@ def _copy_static_assets(output_dir: Path) -> None:
 
 def main(
     output_dir: Union[str, Path] = "_site",
-    template: Union[str, Path] = "templates/tailwind.html.j2",
+    template: Union[str, Path] = "templates/tailwind_brutalism.html.j2",
 ) -> None:
     """Main function to export marimo notebooks.
 
